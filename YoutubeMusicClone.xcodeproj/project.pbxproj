@@ -7,15 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14CEB1915415287165A0B67D /* Pods_YoutubeMusicClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDBFC79956E51B62384C3667 /* Pods_YoutubeMusicClone.framework */; };
+		BE6880712A5BE1F100B7460A /* MusicPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880702A5BE1F100B7460A /* MusicPlayerViewController.swift */; };
+		BE6880752A5C30DC00B7460A /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880742A5C30DC00B7460A /* Music.swift */; };
+		BE6880772A5D1EB200B7460A /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880762A5D1EB200B7460A /* WebService.swift */; };
+		BE68807A2A5D38BA00B7460A /* MusicPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880792A5D38BA00B7460A /* MusicPlayerViewModel.swift */; };
+		BE68807C2A5D797200B7460A /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE68807B2A5D797200B7460A /* Observable.swift */; };
+		BE6880A62A612CBC00B7460A /* FloatingPanelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880A52A612CBC00B7460A /* FloatingPanelLayout.swift */; };
+		BE6880A82A613B2600B7460A /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880A72A613B2600B7460A /* SavedViewController.swift */; };
+		BE6880AA2A66715500B7460A /* MusicPlayerPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880A92A66715500B7460A /* MusicPlayerPageViewController.swift */; };
+		BE6880B42A67C89B00B7460A /* TabBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880B32A67C89B00B7460A /* TabBarCollectionViewCell.swift */; };
+		BE6880B62A680AB500B7460A /* MusicListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880B52A680AB500B7460A /* MusicListViewController.swift */; };
+		BE80AF062A4EC248006B53AB /* MyHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80AF052A4EC248006B53AB /* MyHeaderFooterView.swift */; };
+		BE80AF312A582EA7006B53AB /* MyMusicStationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80AF302A582EA7006B53AB /* MyMusicStationCell.swift */; };
 		BE96D92D2A3C2A1A000B386C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE96D92C2A3C2A1A000B386C /* AppDelegate.swift */; };
 		BE96D92F2A3C2A1A000B386C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE96D92E2A3C2A1A000B386C /* SceneDelegate.swift */; };
 		BE96D9312A3C2A1A000B386C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE96D9302A3C2A1A000B386C /* ViewController.swift */; };
 		BE96D9342A3C2A1A000B386C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE96D9322A3C2A1A000B386C /* Main.storyboard */; };
 		BE96D9362A3C2A1B000B386C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE96D9352A3C2A1B000B386C /* Assets.xcassets */; };
 		BE96D9392A3C2A1B000B386C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE96D9372A3C2A1B000B386C /* LaunchScreen.storyboard */; };
+		BE96D9422A3C2A73000B386C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BE96D9412A3C2A73000B386C /* SnapKit */; };
+		BE96D9442A3C2B88000B386C /* Songs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE96D9432A3C2B88000B386C /* Songs.swift */; };
+		BE96D9462A3C2ECB000B386C /* SongsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE96D9452A3C2ECB000B386C /* SongsCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8B31A83E14D5EFDA850A0527 /* Pods-YoutubeMusicClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YoutubeMusicClone.debug.xcconfig"; path = "Target Support Files/Pods-YoutubeMusicClone/Pods-YoutubeMusicClone.debug.xcconfig"; sourceTree = "<group>"; };
+		BE6880702A5BE1F100B7460A /* MusicPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewController.swift; sourceTree = "<group>"; };
+		BE6880742A5C30DC00B7460A /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
+		BE6880762A5D1EB200B7460A /* WebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
+		BE6880792A5D38BA00B7460A /* MusicPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewModel.swift; sourceTree = "<group>"; };
+		BE68807B2A5D797200B7460A /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		BE6880A52A612CBC00B7460A /* FloatingPanelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanelLayout.swift; sourceTree = "<group>"; };
+		BE6880A72A613B2600B7460A /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
+		BE6880A92A66715500B7460A /* MusicPlayerPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerPageViewController.swift; sourceTree = "<group>"; };
+		BE6880B32A67C89B00B7460A /* TabBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionViewCell.swift; sourceTree = "<group>"; };
+		BE6880B52A680AB500B7460A /* MusicListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListViewController.swift; sourceTree = "<group>"; };
+		BE80AF052A4EC248006B53AB /* MyHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHeaderFooterView.swift; sourceTree = "<group>"; };
+		BE80AF302A582EA7006B53AB /* MyMusicStationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMusicStationCell.swift; sourceTree = "<group>"; };
 		BE96D9292A3C2A1A000B386C /* YoutubeMusicClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YoutubeMusicClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE96D92C2A3C2A1A000B386C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BE96D92E2A3C2A1A000B386C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +53,10 @@
 		BE96D9352A3C2A1B000B386C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE96D9382A3C2A1B000B386C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BE96D93A2A3C2A1B000B386C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE96D9432A3C2B88000B386C /* Songs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Songs.swift; sourceTree = "<group>"; };
+		BE96D9452A3C2ECB000B386C /* SongsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongsCollectionViewCell.swift; sourceTree = "<group>"; };
+		C67B0DAB9EA37CC955097BFA /* Pods-YoutubeMusicClone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YoutubeMusicClone.release.xcconfig"; path = "Target Support Files/Pods-YoutubeMusicClone/Pods-YoutubeMusicClone.release.xcconfig"; sourceTree = "<group>"; };
+		EDBFC79956E51B62384C3667 /* Pods_YoutubeMusicClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YoutubeMusicClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +64,66 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE96D9422A3C2A73000B386C /* SnapKit in Frameworks */,
+				14CEB1915415287165A0B67D /* Pods_YoutubeMusicClone.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9103BC1720C91964E6DC7A42 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EDBFC79956E51B62384C3667 /* Pods_YoutubeMusicClone.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BE6880722A5C2AA700B7460A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BE6880762A5D1EB200B7460A /* WebService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		BE6880782A5D38A700B7460A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BE6880792A5D38BA00B7460A /* MusicPlayerViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BE80AF322A582F22006B53AB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BE96D9432A3C2B88000B386C /* Songs.swift */,
+				BE6880742A5C30DC00B7460A /* Music.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BE80AF332A5BCC3E006B53AB /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				BE96D9302A3C2A1A000B386C /* ViewController.swift */,
+				BE6880A72A613B2600B7460A /* SavedViewController.swift */,
+				BE6880702A5BE1F100B7460A /* MusicPlayerViewController.swift */,
+				BE6880A92A66715500B7460A /* MusicPlayerPageViewController.swift */,
+				BE6880B52A680AB500B7460A /* MusicListViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		BE96D9202A3C2A1A000B386C = {
 			isa = PBXGroup;
 			children = (
 				BE96D92B2A3C2A1A000B386C /* YoutubeMusicClone */,
 				BE96D92A2A3C2A1A000B386C /* Products */,
+				FBE047B356A69D303D9B7738 /* Pods */,
+				9103BC1720C91964E6DC7A42 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,15 +138,41 @@
 		BE96D92B2A3C2A1A000B386C /* YoutubeMusicClone */ = {
 			isa = PBXGroup;
 			children = (
+				BE68807B2A5D797200B7460A /* Observable.swift */,
+				BE6880A52A612CBC00B7460A /* FloatingPanelLayout.swift */,
+				BE6880782A5D38A700B7460A /* ViewModels */,
+				BE6880722A5C2AA700B7460A /* Services */,
+				BE80AF332A5BCC3E006B53AB /* Controllers */,
+				BE80AF322A582F22006B53AB /* Models */,
+				BE96D9472A404ECA000B386C /* Cells */,
 				BE96D92C2A3C2A1A000B386C /* AppDelegate.swift */,
 				BE96D92E2A3C2A1A000B386C /* SceneDelegate.swift */,
-				BE96D9302A3C2A1A000B386C /* ViewController.swift */,
 				BE96D9322A3C2A1A000B386C /* Main.storyboard */,
 				BE96D9352A3C2A1B000B386C /* Assets.xcassets */,
 				BE96D9372A3C2A1B000B386C /* LaunchScreen.storyboard */,
 				BE96D93A2A3C2A1B000B386C /* Info.plist */,
 			);
 			path = YoutubeMusicClone;
+			sourceTree = "<group>";
+		};
+		BE96D9472A404ECA000B386C /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				BE96D9452A3C2ECB000B386C /* SongsCollectionViewCell.swift */,
+				BE80AF302A582EA7006B53AB /* MyMusicStationCell.swift */,
+				BE80AF052A4EC248006B53AB /* MyHeaderFooterView.swift */,
+				BE6880B32A67C89B00B7460A /* TabBarCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		FBE047B356A69D303D9B7738 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8B31A83E14D5EFDA850A0527 /* Pods-YoutubeMusicClone.debug.xcconfig */,
+				C67B0DAB9EA37CC955097BFA /* Pods-YoutubeMusicClone.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,15 +182,20 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE96D93D2A3C2A1B000B386C /* Build configuration list for PBXNativeTarget "YoutubeMusicClone" */;
 			buildPhases = (
+				00D8CBBFD4D47A2DA0942D22 /* [CP] Check Pods Manifest.lock */,
 				BE96D9252A3C2A1A000B386C /* Sources */,
 				BE96D9262A3C2A1A000B386C /* Frameworks */,
 				BE96D9272A3C2A1A000B386C /* Resources */,
+				282E2B341A4F638759332E97 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = YoutubeMusicClone;
+			packageProductDependencies = (
+				BE96D9412A3C2A73000B386C /* SnapKit */,
+			);
 			productName = YoutubeMusicClone;
 			productReference = BE96D9292A3C2A1A000B386C /* YoutubeMusicClone.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +224,9 @@
 				Base,
 			);
 			mainGroup = BE96D9202A3C2A1A000B386C;
+			packageReferences = (
+				BE96D9402A3C2A73000B386C /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = BE96D92A2A3C2A1A000B386C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -133,14 +249,70 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		00D8CBBFD4D47A2DA0942D22 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-YoutubeMusicClone-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		282E2B341A4F638759332E97 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-YoutubeMusicClone/Pods-YoutubeMusicClone-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-YoutubeMusicClone/Pods-YoutubeMusicClone-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YoutubeMusicClone/Pods-YoutubeMusicClone-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		BE96D9252A3C2A1A000B386C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE96D9442A3C2B88000B386C /* Songs.swift in Sources */,
+				BE68807A2A5D38BA00B7460A /* MusicPlayerViewModel.swift in Sources */,
+				BE6880A82A613B2600B7460A /* SavedViewController.swift in Sources */,
+				BE6880B62A680AB500B7460A /* MusicListViewController.swift in Sources */,
+				BE80AF312A582EA7006B53AB /* MyMusicStationCell.swift in Sources */,
+				BE80AF062A4EC248006B53AB /* MyHeaderFooterView.swift in Sources */,
+				BE68807C2A5D797200B7460A /* Observable.swift in Sources */,
 				BE96D9312A3C2A1A000B386C /* ViewController.swift in Sources */,
 				BE96D92D2A3C2A1A000B386C /* AppDelegate.swift in Sources */,
+				BE6880A62A612CBC00B7460A /* FloatingPanelLayout.swift in Sources */,
+				BE6880752A5C30DC00B7460A /* Music.swift in Sources */,
+				BE96D9462A3C2ECB000B386C /* SongsCollectionViewCell.swift in Sources */,
+				BE6880AA2A66715500B7460A /* MusicPlayerPageViewController.swift in Sources */,
+				BE6880B42A67C89B00B7460A /* TabBarCollectionViewCell.swift in Sources */,
 				BE96D92F2A3C2A1A000B386C /* SceneDelegate.swift in Sources */,
+				BE6880772A5D1EB200B7460A /* WebService.swift in Sources */,
+				BE6880712A5BE1F100B7460A /* MusicPlayerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +454,7 @@
 		};
 		BE96D93E2A3C2A1B000B386C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B31A83E14D5EFDA850A0527 /* Pods-YoutubeMusicClone.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -310,6 +483,7 @@
 		};
 		BE96D93F2A3C2A1B000B386C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C67B0DAB9EA37CC955097BFA /* Pods-YoutubeMusicClone.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -358,6 +532,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BE96D9402A3C2A73000B386C /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BE96D9412A3C2A73000B386C /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE96D9402A3C2A73000B386C /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BE96D9212A3C2A1A000B386C /* Project object */;
 }
