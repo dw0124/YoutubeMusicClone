@@ -68,11 +68,7 @@ extension MusicListViewController: UITableViewDelegate {
         
             let deleteAction = UIContextualAction(style: .destructive, title: "delete") { action, view, completion in
                 completion(true)
-                print(#function)
-                //MusicPlayerSingleton.shared.removeIndex = indexPath.row
-                //MusicPlayerSingleton.shared.music.value?.results.remove(at: indexPath.row)
                 MusicPlayerSingleton.shared.removeMusicAt(indexPath: indexPath.row)
-                print(MusicPlayerSingleton.shared.removeIndex, MusicPlayerSingleton.shared.currentIndex)
                 self.musicListTableView.reloadData()
             }
             
