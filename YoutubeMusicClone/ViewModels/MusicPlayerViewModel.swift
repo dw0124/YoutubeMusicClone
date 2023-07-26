@@ -18,18 +18,10 @@ class MusicPlayerViewModel {
     var currentIndex = 0
     var player: AVPlayer?
     var playerItem: AVPlayerItem?
-    var image: Observable<UIImage> = Observable(UIImage())   
-//    var music: Music? = Music(resultCount: 0, results: []){
-//        didSet{
-//            if removeIndex == currentIndex {
-//                print("music didSet")
-//                getImage()
-//                getMusicFile()
-//            }
-//        }
-//    }
-    
+    var image: Observable<UIImage> = Observable(UIImage())
     var music: Observable<Music> = Observable(Music(resultCount: 0, results: []))
+    
+    var currentSliderValue = 0
     
     var isPlaying: Bool = false {
         didSet {
@@ -116,17 +108,9 @@ class MusicPlayerSingleton {
     var player: AVPlayer?
     var playerItem: AVPlayerItem?
     var image: Observable<UIImage> = Observable(UIImage())
-//    var music: Music? = Music(resultCount: 0, results: [])
-//    {
-//        didSet{
-//            if removeIndex == currentIndex {
-//                print("music didSet", currentIndex, removeIndex)
-//                getImage()
-//                getMusicFile()
-//            }
-//        }
-//    }
     var music: Observable<Music> = Observable(Music(resultCount: 0, results: []))
+    
+    var sliderValue: Float = 0
     
     var isPlaying: Bool = false {
         didSet {
@@ -219,4 +203,15 @@ class MusicPlayerSingleton {
             self.music.value?.results.remove(at: indexPath)
         }
     }
+    
+    func updateSlider() {
+        var value: Float = 0
+        if let currentTime = player?.currentTime(), let duration = playerItem?.duration {
+            let currentTimeSeconds = CMTimeGetSeconds(currentTime)
+            let durationSeconds = CMTimeGetSeconds(duration)
+            value = Float(currentTimeSeconds / durationSeconds)
+        }
+        sliderValue = value
+    }
+    
 }

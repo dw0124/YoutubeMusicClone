@@ -34,6 +34,13 @@ class ViewController: UIViewController {
         setupViews()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        MusicPlayerSingleton.shared.music.bind { music in
+        }
+    }
+    
     private func setupViews() {
         view.backgroundColor = .black
         collectionView.backgroundColor = .black

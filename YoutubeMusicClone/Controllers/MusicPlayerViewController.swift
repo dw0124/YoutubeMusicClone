@@ -16,10 +16,20 @@ class MusicPlayerViewController: UIViewController {
     
     let fpc = FloatingPanelController()
     
+    var checkFpcState: FloatingPanelState = .full
+    
     let imageView = UIImageView()
+    let slider = UISlider()
     let playButton = UIButton()
     let nextButton = UIButton()
     let prevButton = UIButton()
+    var stackView: UIStackView = {
+        let stackView = UIStackView()
+        //stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
     
     var artist = ""
     
@@ -32,7 +42,7 @@ class MusicPlayerViewController: UIViewController {
         
         setUp()
         setBinding()
-        
+        //addPeriodicTimeObserver()
         openMusicListFloatingPanel()
     }
     
@@ -57,7 +67,7 @@ extension MusicPlayerViewController {
         // 현재 재생 시간이 3초보다 작을 경우 이전 노래 재생
         if currentTime < 3 {
             musicPlayer.prevMusic()
-            playButton.isSelected = musicPlayer.isPlaying ?? false ? true : false
+            playButton.isSelected = musicPlayer.isPlaying ? true : false
         } else {
             // 현재 재생 시간이 3초보다 클 경우 현재 노래 처음부분으로 이동
             let time = CMTime(seconds: 0, preferredTimescale: 1000)
@@ -89,19 +99,18 @@ extension MusicPlayerViewController {
         
         imageView.backgroundColor = .gray
         
-        let stackView = UIStackView(arrangedSubviews: [prevButton, playButton, nextButton])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 30
+        stackView.addArrangedSubview(prevButton)
+        stackView.addArrangedSubview(playButton)
+        stackView.addArrangedSubview(nextButton)
         
         view.addSubview(imageView)
         view.addSubview(stackView)
+        view.addSubview(slider)
         
         stackView.snp.makeConstraints { stackView in
+            stackView.width.equalTo(300)
             stackView.centerX.equalToSuperview()
             stackView.centerY.equalToSuperview()
-            stackView.width.equalTo(200)
         }
         
         imageView.snp.makeConstraints { imageView in
@@ -109,6 +118,12 @@ extension MusicPlayerViewController {
             imageView.height.equalTo(300)
             imageView.width.equalTo(300)
             imageView.centerX.equalToSuperview()
+        }
+        
+        slider.snp.makeConstraints { slider in
+            slider.top.equalTo(stackView.snp.bottom).offset(30)
+            slider.width.equalTo(imageView.snp.width)
+            slider.centerX.equalToSuperview()
         }
         
     }
@@ -119,6 +134,7 @@ extension MusicPlayerViewController {
             DispatchQueue.main.async {
                 self?.imageView.image = image
             }
+            self?.addPeriodicTimeObserver()
         }
     }
     
@@ -134,85 +150,138 @@ extension MusicPlayerViewController {
         
         fpc.isRemovalInteractionEnabled = false
         fpc.surfaceView.grabberHandle.isHidden = false
-        fpc.surfaceView.backgroundColor = #colorLiteral(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        fpc.surfaceView.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
         
         let appearance = SurfaceAppearance()
         appearance.cornerRadius = 8.0
-        
+        appearance.backgroundColor = .clear
         fpc.surfaceView.appearance = appearance
         
         fpc.addPanel(toParent: self, animated: true)
+    }
+    
+    // 1초마다 addPeriodicTimeObserver(forInterval:queue:)를 통해 변경
+    func addPeriodicTimeObserver() {
+        let interval = CMTime(value: 1, timescale: 1)
+        MusicPlayerSingleton.shared.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
+            guard let currentItem = MusicPlayerSingleton.shared.player?.currentItem else {
+                return
+            }
+            MusicPlayerSingleton.shared.updateSlider()
+            self.slider.setValue(MusicPlayerSingleton.shared.sliderValue, animated: true)
+        }
     }
 }
 
 // MARK: - FloatingPanelControllerDelegate
 extension MusicPlayerViewController: FloatingPanelControllerDelegate {
     
+    /// 플레이어창 내부 fpc
+    func insidePlayerChangedState(_ fpc: FloatingPanelController) {
+        print(#function)
+        switch fpc.state {
+        case .full:
+            
+            self.imageView.snp.removeConstraints()
+            self.imageView.snp.makeConstraints { imageView in
+                imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
+                imageView.leading.equalToSuperview().offset(12)
+                imageView.height.equalTo(70)
+                imageView.width.equalTo(70)
+            }
+
+            stackView.removeArrangedSubview(prevButton)
+            prevButton.removeFromSuperview()
+            
+            slider.isHidden = true
+            
+            stackView.snp.removeConstraints()
+            
+            stackView.snp.makeConstraints { stackView in
+                stackView.centerY.equalTo(self.imageView)
+                stackView.trailing.equalToSuperview().offset(-12)
+                stackView.width.equalTo(50)
+            }
+            
+        case .tip:
+            stackView.insertArrangedSubview(prevButton, at: 0)
+            
+            stackView.snp.removeConstraints()
+            stackView.snp.makeConstraints { stackView in
+                stackView.width.equalTo(300)
+                stackView.centerX.equalToSuperview()
+                stackView.centerY.equalToSuperview()
+            }
+            
+            imageView.snp.removeConstraints()
+            imageView.snp.makeConstraints { imageView in
+                imageView.bottom.equalTo(self.stackView.snp.top)
+                imageView.height.equalTo(300)
+                imageView.width.equalTo(300)
+                imageView.centerX.equalToSuperview()
+            }
+            slider.isHidden = false
+            
+        default:
+            imageView.snp.removeConstraints()
+            imageView.snp.makeConstraints { imageView in
+                imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
+                imageView.leading.equalToSuperview().offset(12)
+                imageView.height.equalTo(70)
+                imageView.width.equalTo(70)
+            }
+        }
+    }
+
+    
+    /// 플레이어창 fpc
+    func playerChangedState(_ fpc: FloatingPanelController) {
+        print(#function)
+        switch fpc.state {
+        case .tip:
+            view.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+            
+            fpc.isRemovalInteractionEnabled = true
+            
+            self.imageView.snp.removeConstraints()
+            self.imageView.snp.makeConstraints { imageView in
+                imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
+                imageView.leading.equalToSuperview().offset(12)
+                imageView.height.equalTo(70)
+                imageView.width.equalTo(70)
+            }
+
+            stackView.removeArrangedSubview(prevButton)
+            prevButton.removeFromSuperview()
+            
+            slider.isHidden = true
+            
+            stackView.snp.removeConstraints()
+            
+            stackView.snp.makeConstraints { stackView in
+                stackView.centerY.equalTo(self.imageView)
+                stackView.trailing.equalToSuperview().offset(-12)
+                stackView.width.equalTo(50)
+            }
+            
+            self.tabBarController?.tabBar.isHidden = false
+        case .full:
+            view.backgroundColor = .black
+            fpc.surfaceView.backgroundColor = .black
+            self.fpc.move(to: .tip, animated: true)
+            self.tabBarController?.tabBar.isHidden = true
+        default:
+            self.tabBarController?.tabBar.isHidden = false
+        }
+    }
+    
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
+        print("외부: " ,fpc.state, "내부 :", self.fpc.state)
         
-        if fpc == self.fpc {
-            print("fpc")
-            if fpc.state == .full {
-                self.imageView.snp.removeConstraints()
-                
-                self.imageView.snp.makeConstraints { imageView in
-                    imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
-                    imageView.leading.equalToSuperview().offset(12)
-                    imageView.height.equalTo(70)
-                    imageView.width.equalTo(70)
-                }
-            } else if fpc.state == .tip {
-                self.imageView.snp.removeConstraints()
-                
-                self.imageView.snp.makeConstraints { imageView in
-                    imageView.bottom.equalTo(self.playButton.snp.top)
-                    imageView.height.equalTo(300)
-                    imageView.width.equalTo(300)
-                    imageView.centerX.equalToSuperview()
-                }
-            }
-        } else {
-            print("playerfpc")
-            if fpc.state == .tip {
-                fpc.isRemovalInteractionEnabled = true
-                
-                UIView.animate(withDuration: 0.3) {
-                    self.tabBarController?.tabBar.isHidden = false
-                    
-                    self.view.backgroundColor = #colorLiteral(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
-                    
-                    self.imageView.snp.removeConstraints()
-                    
-                    self.imageView.snp.makeConstraints { imageView in
-                        imageView.top.equalToSuperview().offset(6)
-                        imageView.leading.equalToSuperview().offset(12)
-                        imageView.height.equalTo(70)
-                        imageView.width.equalTo(70)
-                    }
-                }
-                self.view.layoutIfNeeded()
-                
-                
-            } else {
-                fpc.isRemovalInteractionEnabled = false
-                
-                UIView.animate(withDuration: 0.3) {
-                    self.tabBarController?.tabBar.isHidden = true
-                    
-                    self.view.backgroundColor = .black
-                    
-                    self.imageView.snp.removeConstraints()
-                    
-                    self.imageView.snp.makeConstraints { imageView in
-                        imageView.bottom.equalTo(self.playButton.snp.top)
-                        imageView.height.equalTo(300)
-                        imageView.width.equalTo(300)
-                        imageView.centerX.equalToSuperview()
-                    }
-                }
-                self.view.layoutIfNeeded()
-                
-            }
+        if fpc == self.fpc {    // 플레이어 내부 fpc
+            insidePlayerChangedState(self.fpc)
+        } else {    // 플레이어 fpc
+            playerChangedState(fpc)
         }
     }
     

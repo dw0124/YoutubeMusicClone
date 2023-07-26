@@ -53,7 +53,7 @@ class MusicPlayerPageViewController: UIViewController {
         flowLayout.minimumLineSpacing = 0
         collectionView.collectionViewLayout = flowLayout
         
-        collectionView.backgroundColor = .brown
+        collectionView.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         
@@ -62,7 +62,7 @@ class MusicPlayerPageViewController: UIViewController {
             make.height.equalTo(83)
         }
         
-        underLineView.backgroundColor = .black
+        underLineView.backgroundColor = .white
         view.addSubview(underLineView)
         
         underLineView.snp.makeConstraints { make in
@@ -120,7 +120,7 @@ extension MusicPlayerPageViewController: UICollectionViewDataSource {
         
         let title = cellTitles[indexPath.item]
         cell.setTitle(title: title)
-        
+        cell.titleLabel.textColor = .white
         if indexPath.item == 0 {
             cell.isSelected = true
         }
@@ -140,6 +140,7 @@ extension MusicPlayerPageViewController: UICollectionViewDelegateFlowLayout {
         selectedTabIndex = indexPath.item // Selected index of the tab bar
         
         if let selectedItem = collectionView.cellForItem(at: indexPath) {
+            
             updateUnderLineViewLayout(selectedItem: selectedItem)
         }
         pageController.setViewControllers([viewControllers[selectedTabIndex]], direction: .reverse, animated: true, completion: nil)

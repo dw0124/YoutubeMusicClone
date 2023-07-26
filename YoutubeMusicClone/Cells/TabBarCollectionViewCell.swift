@@ -12,7 +12,7 @@ import UIKit
 class TabBarCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "TabBarCell"
     
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.textAlignment = .center
