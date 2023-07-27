@@ -53,6 +53,19 @@ extension MusicListViewController: UITableViewDataSource {
         cell.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
         cell.textLabel?.text = MusicPlayerSingleton.shared.music.value?.results[indexPath.row].trackName
         cell.textLabel?.textColor = .white
+        cell.imageView?.image = UIImage()
+        if let imageUrl = MusicPlayerSingleton.shared.music.value?.results[indexPath.row].artworkUrl100 {
+            if let url = URL(string: imageUrl) {
+                DispatchQueue.global().async {
+                    let data = try? Data(contentsOf: url)
+                    DispatchQueue.main.async {
+                        cell.imageView?.image = UIImage(data: data!)
+                    }
+                }
+            }
+        }
+        
+        cell.imageView?.image
         return cell
     }
 
