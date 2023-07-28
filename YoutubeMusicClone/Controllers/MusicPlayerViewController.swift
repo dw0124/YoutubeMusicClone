@@ -20,6 +20,7 @@ class MusicPlayerViewController: UIViewController {
     
     let imageView = UIImageView()
     let slider = UISlider()
+    var titleLabel = UILabel()
     let playButton = UIButton()
     let nextButton = UIButton()
     let prevButton = UIButton()
@@ -59,6 +60,8 @@ extension MusicPlayerViewController {
     @objc func touchNextButton(_ sender: Any) {
         musicPlayer.nextMusic()
         playButton.isSelected = true
+        
+        titleLabel.text = MusicPlayerSingleton.shared.music.value?.results[MusicPlayerSingleton.shared.currentIndex].trackName
     }
     
     @objc func touchPrevButton(_ sender: Any) {
@@ -73,11 +76,17 @@ extension MusicPlayerViewController {
             let time = CMTime(seconds: 0, preferredTimescale: 1000)
             musicPlayer.player?.seek(to: time)
         }
+        titleLabel.text = MusicPlayerSingleton.shared.music.value?.results[MusicPlayerSingleton.shared.currentIndex].trackName
     }
     
     // setUp
     func setUp() {
         view.backgroundColor = .black
+        
+        titleLabel.textAlignment = .center
+        titleLabel.textColor = .white
+        titleLabel.text = "title"
+        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         
         nextButton.setImage(UIImage(systemName: "chevron.right.2"), for: .normal)
         nextButton.setImage(UIImage(systemName: "chevron.right.2"), for: .highlighted)
@@ -106,6 +115,7 @@ extension MusicPlayerViewController {
         view.addSubview(imageView)
         view.addSubview(stackView)
         view.addSubview(slider)
+        view.addSubview(titleLabel)
         
         stackView.snp.makeConstraints { stackView in
             stackView.width.equalTo(300)
@@ -126,6 +136,11 @@ extension MusicPlayerViewController {
             slider.centerX.equalToSuperview()
         }
         
+        titleLabel.snp.makeConstraints { title in
+            title.centerX.equalToSuperview()
+            title.top.equalTo(slider.snp.bottom).offset(24)
+            title.width.equalTo(imageView.snp.width)
+        }
     }
     
     // binding
@@ -133,6 +148,7 @@ extension MusicPlayerViewController {
         MusicPlayerSingleton.shared.image.bind { [weak self] image in
             DispatchQueue.main.async {
                 self?.imageView.image = image
+                self?.titleLabel.text = MusicPlayerSingleton.shared.music.value?.results[MusicPlayerSingleton.shared.currentIndex].trackName
             }
             self?.addPeriodicTimeObserver()
         }
