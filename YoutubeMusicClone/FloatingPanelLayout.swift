@@ -21,6 +21,19 @@ class MusicFloatingPanelLayout: FloatingPanelLayout {
     
 }
 
+class MusicWithCoreDataFloatingPanelLayout: FloatingPanelLayout {
+
+    var position: FloatingPanelPosition = .bottom
+    var initialState: FloatingPanelState = .tip
+    
+
+    let anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] = [
+        .full: FloatingPanelLayoutAnchor(absoluteInset: 0, edge: .top, referenceGuide: .superview),
+        .tip: FloatingPanelLayoutAnchor(absoluteInset: 165, edge: .bottom, referenceGuide: .superview)
+    ]
+    
+}
+
 
 class MusicListFloatingPanel: FloatingPanelLayout {
 

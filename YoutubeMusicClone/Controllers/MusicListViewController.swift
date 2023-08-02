@@ -17,92 +17,116 @@ class MusicListViewController: UIViewController {
         super.viewDidLoad()
         
         musicListTableView.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        musicListTableView.register(MusicListTableViewCell.self, forCellReuseIdentifier: MusicListTableViewCell.identifier)
+        
+        musicListTableView.delegate = self
+        musicListTableView.dataSource = self
+        musicListTableView.dragInteractionEnabled = true
+        musicListTableView.dragDelegate = self
+        musicListTableView.dropDelegate = self
+        
+        view.addSubview(musicListTableView)
+        
+        musicListTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         MusicPlayerSingleton.shared.music.bind { music in
             DispatchQueue.main.async {
                 self.musicListTableView.reloadData()
             }
-        }
-        
-        musicListTableView.delegate = self
-        musicListTableView.dataSource = self
-        
-//        musicListTableView.setEditing(true, animated: false)
-        
-        view.addSubview(musicListTableView)
+            
+            guard let musicResult = MusicPlayerSingleton.shared.music.value else { return }
 
-        musicListTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+//            for (index,music) in musicResult.results.enumerated() {
+//                DataManager.shared.createMusicList(music: music, index: index)
+//            }
+            
         }
+        //        musicListTableView.setEditing(true, animated: false)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        musicListTableView.reloadData()
+        //musicListTableView.reloadData()
     }
 }
 
 extension MusicListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MusicPlayerSingleton.shared.music.value?.resultCount ?? 0
+        return MusicPlayerSingleton.shared.music.value?.results.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
-        cell.textLabel?.text = MusicPlayerSingleton.shared.music.value?.results[indexPath.row].trackName
-        cell.textLabel?.textColor = .white
-        cell.imageView?.image = UIImage()
-        if let imageUrl = MusicPlayerSingleton.shared.music.value?.results[indexPath.row].artworkUrl100 {
-            if let url = URL(string: imageUrl) {
+        
+        guard let cell = musicListTableView.dequeueReusableCell(withIdentifier: MusicListTableViewCell.identifier) as? MusicListTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        guard let value = MusicPlayerSingleton.shared.music.value else {
+            return UITableViewCell()
+        }
+        
+        cell.singerLabel.text = value.results[indexPath.row].artistName
+        cell.titleLabel.text = value.results[indexPath.row].trackName
+        cell.titleLabel.textColor = .white
+        
+        //cell.configure(with: value, index: indexPath.row) // 두 번째 매개변수로 artwork 이미지를 전달할 수 있습니다.
+        
+        // 기존 코드에서 artwork 이미지를 가져오는 비동기 로직을 처리해야 한다면 아래와 같이 하면 됩니다.
+        
+        if let url = URL(string: value.results[indexPath.row].artworkUrl100) {
                 DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: url)
-                    DispatchQueue.main.async {
-                        cell.imageView?.image = UIImage(data: data!)
+                    if let data = try? Data(contentsOf: url) {
+                        let image = UIImage(data: data)
+                        DispatchQueue.main.async {
+                            cell.musicImageView.image = image
+                        }
                     }
                 }
             }
-        }
         
-        cell.imageView?.image
+        cell.selectionStyle = .none
+        cell.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        
         return cell
     }
 
-
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 72
+    }
 }
 
 extension MusicListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        
         MusicPlayerSingleton.shared.didSelectedMusicAt(indexPath: indexPath.row)
+        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = .darkGray
     }
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        print(#function)
         
         let deleteAction = UIContextualAction(style: .destructive, title: "delete") { action, view, completion in
             completion(true)
             MusicPlayerSingleton.shared.removeMusicAt(indexPath: indexPath.row)
             self.musicListTableView.reloadData()
         }
-        
         deleteAction.image = UIImage(systemName: "trash")
         
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-        
         configuration.performsFirstActionWithFullSwipe = true
         
         return configuration
         
     }
-    
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
         if var music = MusicPlayerSingleton.shared.music.value {
             let movedMusic = music.results.remove(at: sourceIndexPath.row)
             music.results.insert(movedMusic, at: destinationIndexPath.row)
@@ -119,4 +143,17 @@ extension MusicListViewController: UITableViewDelegate {
         return .none
     }
     
+}
+
+extension MusicListViewController: UITableViewDragDelegate, UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        //dragItem.localObject = list[indexPath.row]
+        //print(dragItem.localObject)
+        return [dragItem]
+    }
+    
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        print(coordinator.items)
+    }
 }

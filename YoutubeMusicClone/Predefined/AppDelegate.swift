@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().barTintColor = UIColor(red: 0.099019599, green: 0.099019599, blue: 0.099019599, alpha: 1)
         UITabBar.appearance().tintColor = .white
         
+        DataManager.shared.setup(modelName: "Model")
         
         return true
     }
@@ -37,6 +38,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        
+        print(#function)
+//        guard let musicResult = MusicPlayerSingleton.shared.music.value else { return }
+//
+//        //print(musicResult)
+//        for music in musicResult.results {
+//            DataManager.shared.createMusicList(music: music)
+//        }
     }
     
 }

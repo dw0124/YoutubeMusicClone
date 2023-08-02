@@ -18,6 +18,10 @@
 		BE6880AA2A66715500B7460A /* MusicPlayerPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880A92A66715500B7460A /* MusicPlayerPageViewController.swift */; };
 		BE6880B42A67C89B00B7460A /* TabBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880B32A67C89B00B7460A /* TabBarCollectionViewCell.swift */; };
 		BE6880B62A680AB500B7460A /* MusicListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880B52A680AB500B7460A /* MusicListViewController.swift */; };
+		BE6880B82A72492E00B7460A /* MusicListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880B72A72492E00B7460A /* MusicListTableViewCell.swift */; };
+		BE6880E02A7786E700B7460A /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BE6880DE2A7786E700B7460A /* Model.xcdatamodeld */; };
+		BE6880EF2A77AFC400B7460A /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880EE2A77AFC400B7460A /* DataManager.swift */; };
+		BE6880F82A77BC0700B7460A /* DataManager+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6880F72A77BC0700B7460A /* DataManager+Music.swift */; };
 		BE80AF062A4EC248006B53AB /* MyHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80AF052A4EC248006B53AB /* MyHeaderFooterView.swift */; };
 		BE80AF312A582EA7006B53AB /* MyMusicStationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE80AF302A582EA7006B53AB /* MyMusicStationCell.swift */; };
 		BE96D92D2A3C2A1A000B386C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE96D92C2A3C2A1A000B386C /* AppDelegate.swift */; };
@@ -43,6 +47,10 @@
 		BE6880A92A66715500B7460A /* MusicPlayerPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerPageViewController.swift; sourceTree = "<group>"; };
 		BE6880B32A67C89B00B7460A /* TabBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionViewCell.swift; sourceTree = "<group>"; };
 		BE6880B52A680AB500B7460A /* MusicListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListViewController.swift; sourceTree = "<group>"; };
+		BE6880B72A72492E00B7460A /* MusicListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListTableViewCell.swift; sourceTree = "<group>"; };
+		BE6880DF2A7786E700B7460A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		BE6880EE2A77AFC400B7460A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		BE6880F72A77BC0700B7460A /* DataManager+Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManager+Music.swift"; sourceTree = "<group>"; };
 		BE80AF052A4EC248006B53AB /* MyHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHeaderFooterView.swift; sourceTree = "<group>"; };
 		BE80AF302A582EA7006B53AB /* MyMusicStationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMusicStationCell.swift; sourceTree = "<group>"; };
 		BE96D9292A3C2A1A000B386C /* YoutubeMusicClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YoutubeMusicClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +104,28 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		BE6880F02A77AFDC00B7460A /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				BE6880EE2A77AFC400B7460A /* DataManager.swift */,
+				BE6880F72A77BC0700B7460A /* DataManager+Music.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		BE6880F22A77B00E00B7460A /* Predefined */ = {
+			isa = PBXGroup;
+			children = (
+				BE96D92C2A3C2A1A000B386C /* AppDelegate.swift */,
+				BE96D92E2A3C2A1A000B386C /* SceneDelegate.swift */,
+				BE96D9322A3C2A1A000B386C /* Main.storyboard */,
+				BE96D9352A3C2A1B000B386C /* Assets.xcassets */,
+				BE96D9372A3C2A1B000B386C /* LaunchScreen.storyboard */,
+				BE96D93A2A3C2A1B000B386C /* Info.plist */,
+			);
+			path = Predefined;
+			sourceTree = "<group>";
+		};
 		BE80AF322A582F22006B53AB /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				BE96D92B2A3C2A1A000B386C /* YoutubeMusicClone */,
+				BE6880DE2A7786E700B7460A /* Model.xcdatamodeld */,
 				BE96D92A2A3C2A1A000B386C /* Products */,
 				FBE047B356A69D303D9B7738 /* Pods */,
 				9103BC1720C91964E6DC7A42 /* Frameworks */,
@@ -138,6 +169,7 @@
 		BE96D92B2A3C2A1A000B386C /* YoutubeMusicClone */ = {
 			isa = PBXGroup;
 			children = (
+				BE6880F02A77AFDC00B7460A /* Shared */,
 				BE68807B2A5D797200B7460A /* Observable.swift */,
 				BE6880A52A612CBC00B7460A /* FloatingPanelLayout.swift */,
 				BE6880782A5D38A700B7460A /* ViewModels */,
@@ -145,12 +177,7 @@
 				BE80AF332A5BCC3E006B53AB /* Controllers */,
 				BE80AF322A582F22006B53AB /* Models */,
 				BE96D9472A404ECA000B386C /* Cells */,
-				BE96D92C2A3C2A1A000B386C /* AppDelegate.swift */,
-				BE96D92E2A3C2A1A000B386C /* SceneDelegate.swift */,
-				BE96D9322A3C2A1A000B386C /* Main.storyboard */,
-				BE96D9352A3C2A1B000B386C /* Assets.xcassets */,
-				BE96D9372A3C2A1B000B386C /* LaunchScreen.storyboard */,
-				BE96D93A2A3C2A1B000B386C /* Info.plist */,
+				BE6880F22A77B00E00B7460A /* Predefined */,
 			);
 			path = YoutubeMusicClone;
 			sourceTree = "<group>";
@@ -162,6 +189,7 @@
 				BE80AF302A582EA7006B53AB /* MyMusicStationCell.swift */,
 				BE80AF052A4EC248006B53AB /* MyHeaderFooterView.swift */,
 				BE6880B32A67C89B00B7460A /* TabBarCollectionViewCell.swift */,
+				BE6880B72A72492E00B7460A /* MusicListTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -297,9 +325,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE96D9442A3C2B88000B386C /* Songs.swift in Sources */,
+				BE6880EF2A77AFC400B7460A /* DataManager.swift in Sources */,
 				BE68807A2A5D38BA00B7460A /* MusicPlayerViewModel.swift in Sources */,
 				BE6880A82A613B2600B7460A /* SavedViewController.swift in Sources */,
 				BE6880B62A680AB500B7460A /* MusicListViewController.swift in Sources */,
+				BE6880F82A77BC0700B7460A /* DataManager+Music.swift in Sources */,
 				BE80AF312A582EA7006B53AB /* MyMusicStationCell.swift in Sources */,
 				BE80AF062A4EC248006B53AB /* MyHeaderFooterView.swift in Sources */,
 				BE68807C2A5D797200B7460A /* Observable.swift in Sources */,
@@ -309,9 +339,11 @@
 				BE6880752A5C30DC00B7460A /* Music.swift in Sources */,
 				BE96D9462A3C2ECB000B386C /* SongsCollectionViewCell.swift in Sources */,
 				BE6880AA2A66715500B7460A /* MusicPlayerPageViewController.swift in Sources */,
+				BE6880B82A72492E00B7460A /* MusicListTableViewCell.swift in Sources */,
 				BE6880B42A67C89B00B7460A /* TabBarCollectionViewCell.swift in Sources */,
 				BE96D92F2A3C2A1A000B386C /* SceneDelegate.swift in Sources */,
 				BE6880772A5D1EB200B7460A /* WebService.swift in Sources */,
+				BE6880E02A7786E700B7460A /* Model.xcdatamodeld in Sources */,
 				BE6880712A5BE1F100B7460A /* MusicPlayerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -462,7 +494,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5VQ9DRSPK5;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = YoutubeMusicClone/Info.plist;
+				INFOPLIST_FILE = YoutubeMusicClone/Predefined/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -491,7 +523,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5VQ9DRSPK5;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = YoutubeMusicClone/Info.plist;
+				INFOPLIST_FILE = YoutubeMusicClone/Predefined/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -551,6 +583,19 @@
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		BE6880DE2A7786E700B7460A /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BE6880DF2A7786E700B7460A /* Model.xcdatamodel */,
+			);
+			currentVersion = BE6880DF2A7786E700B7460A /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = BE96D9212A3C2A1A000B386C /* Project object */;
 }

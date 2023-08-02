@@ -39,7 +39,12 @@ class MusicPlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        musicPlayer.artist = artist
+        if artist == "" {
+            MusicPlayerSingleton.shared.getImage()
+            MusicPlayerSingleton.shared.getMusicFile()
+        } else {
+            musicPlayer.artist = artist
+        }
         
         setUp()
         setBinding()
@@ -180,9 +185,9 @@ extension MusicPlayerViewController {
     func addPeriodicTimeObserver() {
         let interval = CMTime(value: 1, timescale: 1)
         MusicPlayerSingleton.shared.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
-            guard let currentItem = MusicPlayerSingleton.shared.player?.currentItem else {
-                return
-            }
+//            guard let currentItem = MusicPlayerSingleton.shared.player?.currentItem else {
+//                return
+//            }
             MusicPlayerSingleton.shared.updateSlider()
             self.slider.setValue(MusicPlayerSingleton.shared.sliderValue, animated: true)
         }
@@ -194,7 +199,6 @@ extension MusicPlayerViewController: FloatingPanelControllerDelegate {
     
     /// 플레이어창 내부 fpc
     func insidePlayerChangedState(_ fpc: FloatingPanelController) {
-        print(#function)
         switch fpc.state {
         case .full:
             
@@ -252,7 +256,6 @@ extension MusicPlayerViewController: FloatingPanelControllerDelegate {
     
     /// 플레이어창 fpc
     func playerChangedState(_ fpc: FloatingPanelController) {
-        print(#function)
         switch fpc.state {
         case .tip:
             view.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
@@ -292,7 +295,6 @@ extension MusicPlayerViewController: FloatingPanelControllerDelegate {
     }
     
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
-        print("외부: " ,fpc.state, "내부 :", self.fpc.state)
         
         if fpc == self.fpc {    // 플레이어 내부 fpc
             insidePlayerChangedState(self.fpc)

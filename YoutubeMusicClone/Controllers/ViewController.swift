@@ -32,6 +32,36 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         setupViews()
+        
+        //DataManager.shared.deleteAll()
+        
+        let musicList = DataManager.shared.fetchMusicList()
+        
+        print(musicList.count)
+        for musicEntity in musicList {
+            if let trackName = musicEntity.trackName,
+               let artistName = musicEntity.artistName,
+               let previewUrl = musicEntity.previewUrl,
+               let artworkUrl30 = musicEntity.artworkUrl30,
+               let artworkUrl60 = musicEntity.artworkUrl60,
+               let artworkUrl100 = musicEntity.artworkUrl100 {
+//                MusicPlayerSingleton.shared.music.value?.results.append(
+                   let result = Result(
+                        trackId: Int(musicEntity.trackId),
+                        trackName: trackName,
+                        artistName: artistName,
+                        previewUrl: previewUrl,
+                        artworkUrl30: artworkUrl30,
+                        artworkUrl60: artworkUrl60,
+                        artworkUrl100: artworkUrl100
+                    )
+                MusicPlayerSingleton.shared.music.value?.results.append(result)
+            }
+        }
+        
+        if musicList.count > 0 {
+            openFloatingPanelWithCoreData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -156,10 +186,30 @@ extension ViewController {
         let contentVC = MusicPlayerViewController()
         
         contentVC.artist = "\(Songs.list[indexPath.section][indexPath.row].title)"
+        print(contentVC.artist)
         
         playerfpc.set(contentViewController: contentVC)
         
         playerfpc.layout = MusicFloatingPanelLayout()
+        playerfpc.invalidateLayout() // if needed
+        
+        playerfpc.delegate = contentVC
+        
+        playerfpc.isRemovalInteractionEnabled = false
+        playerfpc.surfaceView.grabberHandle.isHidden = true
+        
+        playerfpc.surfaceView.backgroundColor = .black
+        
+        playerfpc.addPanel(toParent: self, animated: true)
+    }
+    
+    private func openFloatingPanelWithCoreData() {
+        
+        let contentVC = MusicPlayerViewController()
+        
+        playerfpc.set(contentViewController: contentVC)
+        
+        playerfpc.layout = MusicWithCoreDataFloatingPanelLayout()
         playerfpc.invalidateLayout() // if needed
         
         playerfpc.delegate = contentVC
@@ -208,13 +258,7 @@ extension ViewController {
                     elementKind: UICollectionView.elementKindSectionHeader,
                     alignment: .top
                 )
-                //let footer = NSCollectionLayoutBoundarySupplementaryItem(
-                //    layoutSize: headerFooterSize,
-                //    elementKind: UICollectionView.elementKindSectionFooter,
-                //    alignment: .bottom
-                //)
                 section.boundarySupplementaryItems = [header]
-                
                 
                 return section
             case 1:
