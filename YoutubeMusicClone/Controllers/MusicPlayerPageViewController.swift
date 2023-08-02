@@ -53,7 +53,7 @@ class MusicPlayerPageViewController: UIViewController {
         flowLayout.minimumLineSpacing = 0
         collectionView.collectionViewLayout = flowLayout
         
-        collectionView.backgroundColor = .brown
+        collectionView.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         
@@ -62,7 +62,7 @@ class MusicPlayerPageViewController: UIViewController {
             make.height.equalTo(83)
         }
         
-        underLineView.backgroundColor = .black
+        underLineView.backgroundColor = .white
         view.addSubview(underLineView)
         
         underLineView.snp.makeConstraints { make in
@@ -123,6 +123,9 @@ extension MusicPlayerPageViewController: UICollectionViewDataSource {
         
         if indexPath.item == 0 {
             cell.isSelected = true
+            cell.titleLabel.textColor = UIColor(white: 1.0, alpha: 1.0)
+        } else {
+            cell.titleLabel.textColor = UIColor(white: 1.0, alpha: 0.8)
         }
         
         return cell
@@ -139,7 +142,16 @@ extension MusicPlayerPageViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedTabIndex = indexPath.item // Selected index of the tab bar
         
-        if let selectedItem = collectionView.cellForItem(at: indexPath) {
+        // Reset all cell colors
+        collectionView.visibleCells.forEach { cell in
+            if let tabBarCell = cell as? TabBarCollectionViewCell {
+                tabBarCell.titleLabel.textColor = UIColor(white: 1.0, alpha: 0.8)
+            }
+        }
+
+        // Set the selected cell's text color to pure white
+        if let selectedItem = collectionView.cellForItem(at: indexPath) as? TabBarCollectionViewCell {
+            selectedItem.titleLabel.textColor = UIColor(white: 1.0, alpha: 1.0)
             updateUnderLineViewLayout(selectedItem: selectedItem)
         }
         pageController.setViewControllers([viewControllers[selectedTabIndex]], direction: .reverse, animated: true, completion: nil)

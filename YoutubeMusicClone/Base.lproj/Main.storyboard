@@ -47,7 +47,6 @@
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Alg-rD-X2a">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.081493088097469468" green="0.081493088097469468" blue="0.081493088097469468" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </tabBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="lVt-eN-6zc"/>
