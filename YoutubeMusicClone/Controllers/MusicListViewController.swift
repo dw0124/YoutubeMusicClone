@@ -12,6 +12,8 @@ import SnapKit
 class MusicListViewController: UIViewController {
     
     var musicListTableView = UITableView()
+    var musicEntityList = [MusicEntity]()
+    var checkEvent = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,23 +36,58 @@ class MusicListViewController: UIViewController {
         MusicPlayerSingleton.shared.music.bind { music in
             DispatchQueue.main.async {
                 self.musicListTableView.reloadData()
+                
+                if self.checkEvent == false {
+                    self.fetchAndSaveMusicList()
+                }
             }
-            
-            guard let musicResult = MusicPlayerSingleton.shared.music.value else { return }
-
-//            for (index,music) in musicResult.results.enumerated() {
-//                DataManager.shared.createMusicList(music: music, index: index)
-//            }
-            
         }
-        //        musicListTableView.setEditing(true, animated: false)
         
+        //fetchAndSaveMusicList()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNextMusicPlayed), name: .nextMusicPlayed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePrevMusicPlayed), name: .prevMusicPlayed, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //musicListTableView.reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    func fetchAndSaveMusicList() {
+        DataManager.shared.deleteAll()
+        
+        guard let musicResult = MusicPlayerSingleton.shared.music.value?.results else {
+            return
+        }
+        
+        DataManager.shared.createMusicListList(musicList: musicResult) {
+            self.musicEntityList = DataManager.shared.fetchMusicList()
+        }
+    }
+    
+    @objc func handleNextMusicPlayed() {
+        print(#function)
+        
+        musicListTableView.selectRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0), animated: true, scrollPosition: .top)
+        
+        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex - 1, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        
+        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = .darkGray
+    }
+    
+    @objc func handlePrevMusicPlayed() {
+        print(#function)
+        
+        musicListTableView.selectRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0), animated: true, scrollPosition: .top)
+        
+        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex + 1, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        
+        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = .darkGray
     }
 }
 
@@ -72,21 +109,18 @@ extension MusicListViewController: UITableViewDataSource {
         cell.singerLabel.text = value.results[indexPath.row].artistName
         cell.titleLabel.text = value.results[indexPath.row].trackName
         cell.titleLabel.textColor = .white
-        
-        //cell.configure(with: value, index: indexPath.row) // 두 번째 매개변수로 artwork 이미지를 전달할 수 있습니다.
-        
-        // 기존 코드에서 artwork 이미지를 가져오는 비동기 로직을 처리해야 한다면 아래와 같이 하면 됩니다.
+        cell.imageView?.image = nil
         
         if let url = URL(string: value.results[indexPath.row].artworkUrl100) {
-                DispatchQueue.global().async {
-                    if let data = try? Data(contentsOf: url) {
-                        let image = UIImage(data: data)
-                        DispatchQueue.main.async {
-                            cell.musicImageView.image = image
-                        }
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url) {
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        cell.musicImageView.image = image
                     }
                 }
             }
+        }
         
         cell.selectionStyle = .none
         cell.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
@@ -101,17 +135,28 @@ extension MusicListViewController: UITableViewDataSource {
 
 extension MusicListViewController: UITableViewDelegate {
     
+    // didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
         
         MusicPlayerSingleton.shared.didSelectedMusicAt(indexPath: indexPath.row)
         musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = .darkGray
+        
+        MusicPlayerSingleton.shared.isPlaying.value = true
+        
+        musicListTableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
+    
+    // trailingSwipeActionsConfigurationForRowAt
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let deleteAction = UIContextualAction(style: .destructive, title: "delete") { action, view, completion in
             completion(true)
             MusicPlayerSingleton.shared.removeMusicAt(indexPath: indexPath.row)
+            
+            let willDeleteMusic = self.musicEntityList.remove(at: indexPath.row)
+            DataManager.shared.delete(entity: willDeleteMusic)
+            
             self.musicListTableView.reloadData()
         }
         deleteAction.image = UIImage(systemName: "trash")
@@ -122,17 +167,32 @@ extension MusicListViewController: UITableViewDelegate {
         return configuration
         
     }
+    
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        print(MusicPlayerSingleton.shared.currentIndex)
+        
+        // 셀 위치 변경 후 다음곡을 재생할때 다음곡이 아닌 노래가 재생되는 현상 수정
         if var music = MusicPlayerSingleton.shared.music.value {
             let movedMusic = music.results.remove(at: sourceIndexPath.row)
             music.results.insert(movedMusic, at: destinationIndexPath.row)
             MusicPlayerSingleton.shared.music.value = music
-            MusicPlayerSingleton.shared.currentIndex = destinationIndexPath.row
+            
+            if MusicPlayerSingleton.shared.currentIndex == sourceIndexPath.row {
+                MusicPlayerSingleton.shared.currentIndex = destinationIndexPath.row
+            }
         }
+
+        let firstEntity = self.musicEntityList[sourceIndexPath.row]
+        let secondEntity = self.musicEntityList[destinationIndexPath.row]
+        DataManager.shared.swapMusicEntity(firstEntity: firstEntity, secondEntity: secondEntity, soureIndex: sourceIndexPath.row, destinationIndex: destinationIndexPath.row)
+        let movedMusicEntity = self.musicEntityList.remove(at: sourceIndexPath.row)
+        self.musicEntityList.insert(movedMusicEntity, at: destinationIndexPath.row)
+        
+        
     }
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {

@@ -33,8 +33,6 @@ class ViewController: UIViewController {
         
         setupViews()
         
-        //DataManager.shared.deleteAll()
-        
         let musicList = DataManager.shared.fetchMusicList()
         
         print(musicList.count)
@@ -183,6 +181,10 @@ extension ViewController: UICollectionViewDelegate {
 extension ViewController {
     
     private func openFloatingPanel(indexPath: IndexPath) {
+//        MusicPlayerSingleton.shared.player = nil
+//        MusicPlayerSingleton.shared.playerItem = nil
+        MusicPlayerSingleton.shared.currentIndex = 0
+        
         let contentVC = MusicPlayerViewController()
         
         contentVC.artist = "\(Songs.list[indexPath.section][indexPath.row].title)"
@@ -204,6 +206,9 @@ extension ViewController {
     }
     
     private func openFloatingPanelWithCoreData() {
+//        MusicPlayerSingleton.shared.player = nil
+//        MusicPlayerSingleton.shared.playerItem = nil
+        MusicPlayerSingleton.shared.currentIndex = 0
         
         let contentVC = MusicPlayerViewController()
         
@@ -324,6 +329,8 @@ extension ViewController {
                     alignment: .top
                 )
                 section.boundarySupplementaryItems = [header]
+                
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 80, trailing: 0)
                 
                 return section
             default:

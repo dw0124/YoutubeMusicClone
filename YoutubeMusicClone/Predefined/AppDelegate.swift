@@ -17,6 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UITabBar.appearance().barTintColor = UIColor(red: 0.099019599, green: 0.099019599, blue: 0.099019599, alpha: 1)
         UITabBar.appearance().tintColor = .white
+        UITabBar.appearance().isTranslucent = true
+        
+        if #available(iOS 13.0, *) {
+            let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithDefaultBackground()
+            tabBarAppearance.backgroundColor = UIColor(red: 0.099019599, green: 0.099019599, blue: 0.099019599, alpha: 1)
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+
+            if #available(iOS 15.0, *) {
+                UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+            }
+        }
         
         DataManager.shared.setup(modelName: "Model")
         
