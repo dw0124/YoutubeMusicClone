@@ -11,9 +11,12 @@ import SnapKit
 
 class MusicListViewController: UIViewController {
     
+    let musicPlayer = MusicPlayerSingleton.shared
+    
     var musicListTableView = UITableView()
     var musicEntityList = [MusicEntity]()
     var checkEvent = false
+    var imageCache = [URL: UIImage]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +36,7 @@ class MusicListViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         
-        MusicPlayerSingleton.shared.music.bind { music in
+        musicPlayer.music.bind { music in
             DispatchQueue.main.async {
                 self.musicListTableView.reloadData()
                 
@@ -61,7 +64,7 @@ class MusicListViewController: UIViewController {
     func fetchAndSaveMusicList() {
         DataManager.shared.deleteAll()
         
-        guard let musicResult = MusicPlayerSingleton.shared.music.value?.results else {
+        guard let musicResult = musicPlayer.music.value?.results else {
             return
         }
         
@@ -73,27 +76,27 @@ class MusicListViewController: UIViewController {
     @objc func handleNextMusicPlayed() {
         print(#function)
         
-        musicListTableView.selectRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0), animated: true, scrollPosition: .top)
+        musicListTableView.selectRow(at: IndexPath(row: musicPlayer.currentIndex, section: 0), animated: true, scrollPosition: .top)
         
-        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex - 1, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        musicListTableView.cellForRow(at: IndexPath(row: musicPlayer.currentIndex - 1, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
         
-        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = .darkGray
+        musicListTableView.cellForRow(at: IndexPath(row: musicPlayer.currentIndex, section: 0))?.backgroundColor = .darkGray
     }
     
     @objc func handlePrevMusicPlayed() {
         print(#function)
         
-        musicListTableView.selectRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0), animated: true, scrollPosition: .top)
+        musicListTableView.selectRow(at: IndexPath(row: musicPlayer.currentIndex, section: 0), animated: true, scrollPosition: .top)
         
-        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex + 1, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        musicListTableView.cellForRow(at: IndexPath(row: musicPlayer.currentIndex + 1, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
         
-        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = .darkGray
+        musicListTableView.cellForRow(at: IndexPath(row: musicPlayer.currentIndex, section: 0))?.backgroundColor = .darkGray
     }
 }
 
 extension MusicListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MusicPlayerSingleton.shared.music.value?.results.count ?? 0
+        return musicPlayer.music.value?.results.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -102,7 +105,7 @@ extension MusicListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        guard let value = MusicPlayerSingleton.shared.music.value else {
+        guard let value = musicPlayer.music.value else {
             return UITableViewCell()
         }
         
@@ -111,19 +114,19 @@ extension MusicListViewController: UITableViewDataSource {
         cell.titleLabel.textColor = .white
         cell.imageView?.image = nil
         
-        if let url = URL(string: value.results[indexPath.row].artworkUrl100) {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url) {
-                    let image = UIImage(data: data)
-                    DispatchQueue.main.async {
-                        cell.musicImageView.image = image
-                    }
-                }
+        ImageCacheManager.shared.loadImage(value.results[indexPath.row].artworkUrl30) { image in
+            DispatchQueue.main.async {
+                cell.musicImageView.image = image
             }
         }
         
         cell.selectionStyle = .none
-        cell.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        
+        if indexPath.row == musicPlayer.currentIndex {
+            cell.backgroundColor = .darkGray
+        } else {
+            cell.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        }
         
         return cell
     }
@@ -137,12 +140,12 @@ extension MusicListViewController: UITableViewDelegate {
     
     // didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
+        musicListTableView.cellForRow(at: IndexPath(row: musicPlayer.currentIndex, section: 0))?.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
         
-        MusicPlayerSingleton.shared.didSelectedMusicAt(indexPath: indexPath.row)
-        musicListTableView.cellForRow(at: IndexPath(row: MusicPlayerSingleton.shared.currentIndex, section: 0))?.backgroundColor = .darkGray
+        musicPlayer.didSelectedMusicAt(indexPath: indexPath.row)
+        musicListTableView.cellForRow(at: IndexPath(row: musicPlayer.currentIndex, section: 0))?.backgroundColor = .darkGray
         
-        MusicPlayerSingleton.shared.isPlaying.value = true
+        musicPlayer.isPlaying.value = true
         
         musicListTableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
@@ -152,7 +155,7 @@ extension MusicListViewController: UITableViewDelegate {
         
         let deleteAction = UIContextualAction(style: .destructive, title: "delete") { action, view, completion in
             completion(true)
-            MusicPlayerSingleton.shared.removeMusicAt(indexPath: indexPath.row)
+            self.musicPlayer.removeMusicAt(indexPath: indexPath.row)
             
             let willDeleteMusic = self.musicEntityList.remove(at: indexPath.row)
             DataManager.shared.delete(entity: willDeleteMusic)
@@ -173,16 +176,16 @@ extension MusicListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        print(MusicPlayerSingleton.shared.currentIndex)
+        print(musicPlayer.currentIndex)
         
         // 셀 위치 변경 후 다음곡을 재생할때 다음곡이 아닌 노래가 재생되는 현상 수정
-        if var music = MusicPlayerSingleton.shared.music.value {
+        if var music = musicPlayer.music.value {
             let movedMusic = music.results.remove(at: sourceIndexPath.row)
             music.results.insert(movedMusic, at: destinationIndexPath.row)
-            MusicPlayerSingleton.shared.music.value = music
+            musicPlayer.music.value = music
             
-            if MusicPlayerSingleton.shared.currentIndex == sourceIndexPath.row {
-                MusicPlayerSingleton.shared.currentIndex = destinationIndexPath.row
+            if musicPlayer.currentIndex == sourceIndexPath.row {
+                musicPlayer.currentIndex = destinationIndexPath.row
             }
         }
 

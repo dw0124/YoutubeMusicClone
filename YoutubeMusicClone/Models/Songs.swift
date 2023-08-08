@@ -16,8 +16,8 @@ struct Songs {
 
 extension Songs {
     static let list: [[Songs]] = [[Songs(image: UIImage(systemName: "music.note")!, title: "acdc", singer: "singer1"),
-                                Songs(image: UIImage(systemName: "music.note")!, title: "title2", singer: "singer2"),
-                                Songs(image: UIImage(systemName: "music.note")!, title: "title3", singer: "singer3"),
+                                Songs(image: UIImage(systemName: "music.note")!, title: "lizzo", singer: "singer2"),
+                                Songs(image: UIImage(systemName: "music.note")!, title: "iu", singer: "singer3"),
                                 Songs(image: UIImage(systemName: "music.note")!, title: "title4", singer: "singer4"),
                                 Songs(image: UIImage(systemName: "music.note")!, title: "title5", singer: "singer5"),
                                 Songs(image: UIImage(systemName: "music.note")!, title: "title6", singer: "singer6"),

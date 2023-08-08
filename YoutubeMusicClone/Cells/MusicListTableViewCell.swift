@@ -59,13 +59,7 @@ class MusicListTableViewCell: UITableViewCell {
     }
     
     private func setupCell() {
-//        var stackView = UIStackView()
-//        stackView.addArrangedSubview(titleLabel)
-//        stackView.addArrangedSubview(singerLabel)
-//        stackView.axis = .horizontal
-//        stackView.spacing = 4
         
-//        contentView.addSubview(stackView)
         contentView.addSubview(musicImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(singerLabel)

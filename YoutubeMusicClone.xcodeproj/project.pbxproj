@@ -33,6 +33,7 @@
 		BE96D9422A3C2A73000B386C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BE96D9412A3C2A73000B386C /* SnapKit */; };
 		BE96D9442A3C2B88000B386C /* Songs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE96D9432A3C2B88000B386C /* Songs.swift */; };
 		BE96D9462A3C2ECB000B386C /* SongsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE96D9452A3C2ECB000B386C /* SongsCollectionViewCell.swift */; };
+		BED58F5F2A8244E200B6C6A4 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED58F5E2A8244E200B6C6A4 /* ImageCacheManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		BE96D93A2A3C2A1B000B386C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE96D9432A3C2B88000B386C /* Songs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Songs.swift; sourceTree = "<group>"; };
 		BE96D9452A3C2ECB000B386C /* SongsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongsCollectionViewCell.swift; sourceTree = "<group>"; };
+		BED58F5E2A8244E200B6C6A4 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		C67B0DAB9EA37CC955097BFA /* Pods-YoutubeMusicClone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YoutubeMusicClone.release.xcconfig"; path = "Target Support Files/Pods-YoutubeMusicClone/Pods-YoutubeMusicClone.release.xcconfig"; sourceTree = "<group>"; };
 		EDBFC79956E51B62384C3667 /* Pods_YoutubeMusicClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YoutubeMusicClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -107,8 +109,11 @@
 		BE6880F02A77AFDC00B7460A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				BE68807B2A5D797200B7460A /* Observable.swift */,
+				BE6880A52A612CBC00B7460A /* FloatingPanelLayout.swift */,
 				BE6880EE2A77AFC400B7460A /* DataManager.swift */,
 				BE6880F72A77BC0700B7460A /* DataManager+Music.swift */,
+				BED58F5E2A8244E200B6C6A4 /* ImageCacheManager.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -170,8 +175,6 @@
 			isa = PBXGroup;
 			children = (
 				BE6880F02A77AFDC00B7460A /* Shared */,
-				BE68807B2A5D797200B7460A /* Observable.swift */,
-				BE6880A52A612CBC00B7460A /* FloatingPanelLayout.swift */,
 				BE6880782A5D38A700B7460A /* ViewModels */,
 				BE6880722A5C2AA700B7460A /* Services */,
 				BE80AF332A5BCC3E006B53AB /* Controllers */,
@@ -344,6 +347,7 @@
 				BE96D92F2A3C2A1A000B386C /* SceneDelegate.swift in Sources */,
 				BE6880772A5D1EB200B7460A /* WebService.swift in Sources */,
 				BE6880E02A7786E700B7460A /* Model.xcdatamodeld in Sources */,
+				BED58F5F2A8244E200B6C6A4 /* ImageCacheManager.swift in Sources */,
 				BE6880712A5BE1F100B7460A /* MusicPlayerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

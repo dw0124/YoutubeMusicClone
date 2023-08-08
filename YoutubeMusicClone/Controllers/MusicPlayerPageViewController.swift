@@ -4,7 +4,6 @@ import SnapKit
 class MusicPlayerPageViewController: UIViewController {
 
     // MARK: - Properties
-    
     let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     var selectedTabIndex: Int = 0 // Selected index of the tab bar
     let underLineView = UIView()
@@ -24,7 +23,6 @@ class MusicPlayerPageViewController: UIViewController {
     
     
     // MARK: - View Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
@@ -40,7 +38,6 @@ class MusicPlayerPageViewController: UIViewController {
     
     
     // MARK: - Layout
-    
     func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self

@@ -129,11 +129,11 @@ extension ViewController: UICollectionViewDataSource {
             
             switch indexPath.section {
             case 0:
-                headerView.label.text = "Songs"
+                headerView.mainLabel.text = "Songs"
             case 1:
-                headerView.label.text = "Album"
+                headerView.mainLabel.text = "Album"
             default:
-                headerView.label.text = "Other Section"
+                headerView.mainLabel.text = "Other Section"
             }
             
             return headerView
@@ -143,11 +143,11 @@ extension ViewController: UICollectionViewDataSource {
             
             switch indexPath.section {
             case 0:
-                footerView.label.text = "Songs"
+                footerView.mainLabel.text = "Songs"
             case 1:
-                footerView.label.text = "Album"
+                footerView.mainLabel.text = "Album"
             default:
-                footerView.label.text = "Other Section"
+                footerView.mainLabel.text = "Other Section"
             }
             
             return footerView
@@ -181,9 +181,10 @@ extension ViewController: UICollectionViewDelegate {
 extension ViewController {
     
     private func openFloatingPanel(indexPath: IndexPath) {
-//        MusicPlayerSingleton.shared.player = nil
-//        MusicPlayerSingleton.shared.playerItem = nil
         MusicPlayerSingleton.shared.currentIndex = 0
+        MusicPlayerSingleton.shared.image.value = nil
+        MusicPlayerSingleton.shared.currentArtist.value = ""
+        MusicPlayerSingleton.shared.currentTrackTitle.value = ""
         
         let contentVC = MusicPlayerViewController()
         
@@ -206,9 +207,10 @@ extension ViewController {
     }
     
     private func openFloatingPanelWithCoreData() {
-//        MusicPlayerSingleton.shared.player = nil
-//        MusicPlayerSingleton.shared.playerItem = nil
         MusicPlayerSingleton.shared.currentIndex = 0
+        MusicPlayerSingleton.shared.image.value = nil
+        MusicPlayerSingleton.shared.currentArtist.value = ""
+        MusicPlayerSingleton.shared.currentTrackTitle.value = ""
         
         let contentVC = MusicPlayerViewController()
         
@@ -253,7 +255,7 @@ extension ViewController {
                 
                 // section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
                 section.orthogonalScrollingBehavior = .continuous
                 
                 // header / footer
@@ -278,14 +280,14 @@ extension ViewController {
                 // group
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(0.465),
-                    heightDimension: .fractionalWidth(0.55)
+                    heightDimension: .fractionalWidth(0.6)
                 )
                 
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 1)
                 
                 // section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
                 section.orthogonalScrollingBehavior = .continuous
                 
                 // header / footer
@@ -317,7 +319,7 @@ extension ViewController {
                 
                 // section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 80, trailing: 12)
                 section.orthogonalScrollingBehavior = .none
                 
                 
@@ -329,8 +331,6 @@ extension ViewController {
                     alignment: .top
                 )
                 section.boundarySupplementaryItems = [header]
-                
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 80, trailing: 0)
                 
                 return section
             default:

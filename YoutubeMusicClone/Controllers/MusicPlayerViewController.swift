@@ -14,9 +14,9 @@ import AVFoundation
 
 class MusicPlayerViewController: UIViewController {
     
+    var artist = ""
+    var musicPlayer = MusicPlayerSingleton.shared
     let fpc = FloatingPanelController()
-    
-    var checkFpcState: FloatingPanelState = .full
     
     let imageView = UIImageView()
     let slider = UISlider()
@@ -27,22 +27,17 @@ class MusicPlayerViewController: UIViewController {
     let playButton = UIButton()
     let nextButton = UIButton()
     let prevButton = UIButton()
-    var stackView: UIStackView = {
+    let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         return stackView
     }()
-    var labelStackView: UIStackView = {
+    let labelStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        //stackView.distribution = .equalSpacing
         return stackView
     }()
-    
-    var artist = ""
-    
-    var musicPlayer = MusicPlayerSingleton.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,17 +45,16 @@ class MusicPlayerViewController: UIViewController {
         slider.addTarget(self, action: #selector(didChangedProgressBar(_:)), for: .touchUpInside)
         
         if artist == "" {   // coredata에 저장된 노래가 있을때
-            MusicPlayerSingleton.shared.getImage()
-            MusicPlayerSingleton.shared.getMusicFile()
-            MusicPlayerSingleton.shared.isPlaying.value = false
+            musicPlayer.getImage()
+            musicPlayer.getMusicFile()
+            musicPlayer.isPlaying.value = false
         } else {    // coredata에 저장된 노래가 없고 셀을 선택해서 노래를 불러옴
             musicPlayer.artist = artist
-            MusicPlayerSingleton.shared.isPlaying.value = true
+            musicPlayer.isPlaying.value = true
         }
         
         setUp()
         setBinding()
-        //addPeriodicTimeObserver()
         openMusicListFloatingPanel()
     }
     
@@ -70,13 +64,13 @@ class MusicPlayerViewController: UIViewController {
 extension MusicPlayerViewController {
     
     @objc func didChangedProgressBar(_ sender: UISlider) {
-        guard let duration = MusicPlayerSingleton.shared.playerItem?.duration else { return }
+        guard let duration = musicPlayer.playerItem?.duration else { return }
 
         let value = Float64(sender.value) * CMTimeGetSeconds(duration)
         
         let seekTime = CMTime(value: CMTimeValue(value), timescale: 1)
         
-        MusicPlayerSingleton.shared.player?.seek(to: seekTime)
+        musicPlayer.player?.seek(to: seekTime)
     }
     
     // playButton 조작버튼
@@ -89,7 +83,7 @@ extension MusicPlayerViewController {
         musicPlayer.nextMusic()
         playButton.isSelected = true
         
-        titleLabel.text = MusicPlayerSingleton.shared.music.value?.results[MusicPlayerSingleton.shared.currentIndex].trackName
+        titleLabel.text = musicPlayer.music.value?.results[musicPlayer.currentIndex].trackName
     }
     
     @objc func touchPrevButton(_ sender: Any) {
@@ -98,43 +92,45 @@ extension MusicPlayerViewController {
         // 현재 재생 시간이 3초보다 작을 경우 이전 노래 재생
         if currentTime < 3 {
             musicPlayer.prevMusic()
-            playButton.isSelected = musicPlayer.isPlaying.value ?? false
+            //playButton.isSelected = musicPlayer.isPlaying.value ?? false
+            
+            musicPlayer.isPlaying.value = musicPlayer.isPlaying.value ?? true ? true : false
         } else {
             // 현재 재생 시간이 3초보다 클 경우 현재 노래 처음부분으로 이동
             let time = CMTime(seconds: 0, preferredTimescale: 1000)
             musicPlayer.player?.seek(to: time)
         }
-        titleLabel.text = MusicPlayerSingleton.shared.music.value?.results[MusicPlayerSingleton.shared.currentIndex].trackName
+        titleLabel.text = musicPlayer.music.value?.results[musicPlayer.currentIndex].trackName
     }
     
     // binding
     func setBinding() {
-        MusicPlayerSingleton.shared.image.bind { [weak self] image in
+        musicPlayer.image.bind { [weak self] image in
             DispatchQueue.main.async {
                 self?.imageView.image = image
             }
             self?.addPeriodicTimeObserver()
         }
         
-        MusicPlayerSingleton.shared.isPlaying.bind { [weak self] isPlaying in
+        musicPlayer.isPlaying.bind { [weak self] isPlaying in
             DispatchQueue.main.async {
                 self?.playButton.isSelected = isPlaying ?? false
                 
                 switch isPlaying {
-                case true: MusicPlayerSingleton.shared.player?.play()
-                case false: MusicPlayerSingleton.shared.player?.pause()
-                default: MusicPlayerSingleton.shared.player?.pause()
+                case true: self?.musicPlayer.player?.play()
+                case false: self?.musicPlayer.player?.pause()
+                default: self?.musicPlayer.player?.pause()
                 }
             }
         }
         
-        MusicPlayerSingleton.shared.currentTrackTitle.bind { [weak self] currentTitle in
+        musicPlayer.currentTrackTitle.bind { [weak self] currentTitle in
             DispatchQueue.main.async {
                 self?.titleLabel.text = currentTitle ?? "title"
             }
         }
 
-        MusicPlayerSingleton.shared.currentArtist.bind { [weak self] currentArtist in
+        musicPlayer.currentArtist.bind { [weak self] currentArtist in
             DispatchQueue.main.async {
                 self?.artistLabel.text = currentArtist ?? "aritst"
             }
@@ -144,18 +140,18 @@ extension MusicPlayerViewController {
     // addPeriodicTimeObserver(forInterval:queue:)를 통해 sliderValue 변경
     func addPeriodicTimeObserver() {
         let interval = CMTime(value: 1, timescale: 1)
-        MusicPlayerSingleton.shared.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
-            guard let currentItem = MusicPlayerSingleton.shared.player?.currentItem else {
+        musicPlayer.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
+            guard let currentItem = self.musicPlayer.player?.currentItem else {
                 return
             }
             // update CurrentTime
             let currentTime = currentItem.currentTime().seconds
-            let formattedTime = MusicPlayerSingleton.shared.formatter.string(from: currentTime) ?? "00:00"
+            let formattedTime = self.musicPlayer.formatter.string(from: currentTime) ?? "00:00"
             self.currentTimeLabel.text = formattedTime
             
             if self.slider.isTracking == false {
-                MusicPlayerSingleton.shared.updateSlider()
-                self.slider.setValue(MusicPlayerSingleton.shared.sliderValue, animated: true)
+                self.musicPlayer.updateSlider()
+                self.slider.setValue(self.musicPlayer.sliderValue, animated: true)
             }
             
         }
@@ -269,149 +265,21 @@ extension MusicPlayerViewController: FloatingPanelControllerDelegate {
     func insidePlayerChangedState(_ fpc: FloatingPanelController) {
         switch fpc.state {
         case .full:
-            
-            imageView.snp.removeConstraints()
-            stackView.snp.removeConstraints()
-            labelStackView.snp.removeConstraints()
-            
-            stackView.removeArrangedSubview(prevButton)
-            prevButton.removeFromSuperview()
-            
-            slider.isHidden = true
-            
-            labelStackView.alignment = .leading
-            
-            titleLabel.textAlignment = .left
-            titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        
-            imageView.snp.makeConstraints { imageView in
-                imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
-                imageView.leading.equalToSuperview().offset(12)
-                imageView.height.equalTo(70)
-                imageView.width.equalTo(70)
-            }
-
-            stackView.snp.makeConstraints { stackView in
-                stackView.centerY.equalTo(imageView)
-                stackView.trailing.equalToSuperview().offset(-12)
-                stackView.width.equalTo(50)
-            }
-            
-            
-            labelStackView.snp.makeConstraints { labelStackView in
-                labelStackView.leading.equalTo(imageView.snp.trailing).offset(12)
-                labelStackView.trailing.equalTo(stackView.snp.leading).offset(0)
-                labelStackView.centerY.equalTo(imageView)
-            }
-            
-//            titleLabel.snp.makeConstraints { titleLabel in
-//                titleLabel.leading.equalTo(imageView.snp.trailing).offset(6)
-//                titleLabel.trailing.equalTo(stackView.snp.leading).offset(6)
-//                titleLabel.centerY.equalTo(imageView)
-//            }
-            
-            
+            smallMusicPlayerLayout()
         case .tip:
-            stackView.insertArrangedSubview(prevButton, at: 0)
-            
-            imageView.snp.removeConstraints()
-            //titleLabel.snp.removeConstraints()
-            slider.snp.removeConstraints()
-            stackView.snp.removeConstraints()
-            labelStackView.snp.removeConstraints()
-            
-            labelStackView.alignment = .center
-            
-            titleLabel.textAlignment = .center
-            titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-            
-            imageView.snp.makeConstraints { imageView in
-                imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(80)
-                imageView.centerX.equalToSuperview()
-                imageView.height.equalTo(330)
-                imageView.width.equalTo(330)
-            }
-            
-            labelStackView.snp.makeConstraints { labelStackView in
-                labelStackView.centerX.equalToSuperview()
-                labelStackView.top.equalTo(imageView.snp.bottom).offset(32)
-                labelStackView.width.equalTo(imageView.snp.width)
-            }
-            
-            slider.snp.makeConstraints { slider in
-                //slider.top.equalTo(titleLabel.snp.bottom).offset(24)
-                slider.top.equalTo(labelStackView.snp.bottom).offset(24)
-                slider.width.equalTo(imageView.snp.width)
-                slider.centerX.equalToSuperview()
-            }
-            
-            stackView.snp.makeConstraints { stackView in
-                stackView.top.equalTo(slider.snp.bottom).offset(32)
-                stackView.width.equalTo(imageView.snp.width)
-                stackView.centerX.equalToSuperview()
-            }
-            
-            slider.isHidden = false
-            
+            fullMusicPlayerLayout()
         default:
-            imageView.snp.removeConstraints()
-            imageView.snp.makeConstraints { imageView in
-                imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
-                imageView.leading.equalToSuperview().offset(12)
-                imageView.height.equalTo(70)
-                imageView.width.equalTo(70)
-            }
+            smallMusicPlayerLayout()
         }
     }
 
-    
     /// 플레이어창 fpc
     func playerChangedState(_ fpc: FloatingPanelController) {
         switch fpc.state {
         case .tip:
             view.backgroundColor = UIColor(red: 0.149019599, green: 0.149019599, blue: 0.149019599, alpha: 1)
-            
             fpc.isRemovalInteractionEnabled = true
-            
-            imageView.snp.removeConstraints()
-            stackView.snp.removeConstraints()
-            //titleLabel.snp.removeConstraints()
-            labelStackView.snp.removeConstraints()
-            
-            stackView.removeArrangedSubview(prevButton)
-            prevButton.removeFromSuperview()
-            
-            slider.isHidden = true
-            
-            labelStackView.alignment = .leading
-            
-            titleLabel.textAlignment = .left
-            titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        
-            imageView.snp.makeConstraints { imageView in
-                imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
-                imageView.leading.equalToSuperview().offset(12)
-                imageView.height.equalTo(70)
-                imageView.width.equalTo(70)
-            }
-
-            stackView.snp.makeConstraints { stackView in
-                stackView.centerY.equalTo(imageView)
-                stackView.trailing.equalToSuperview().offset(-12)
-                stackView.width.equalTo(50)
-            }
-            
-//            titleLabel.snp.makeConstraints { titleLabel in
-//                titleLabel.leading.equalTo(imageView.snp.trailing).offset(6)
-//                titleLabel.trailing.equalTo(stackView.snp.leading).offset(6)
-//                titleLabel.centerY.equalTo(imageView)
-//            }
-            labelStackView.snp.makeConstraints { labelStackView in
-                labelStackView.leading.equalTo(imageView.snp.trailing).offset(12)
-                labelStackView.trailing.equalTo(stackView.snp.leading).offset(0)
-                labelStackView.centerY.equalTo(imageView)
-            }
-            
+            smallMusicPlayerLayout()
             self.tabBarController?.tabBar.isHidden = false
         case .full:
             view.backgroundColor = .black
@@ -423,18 +291,22 @@ extension MusicPlayerViewController: FloatingPanelControllerDelegate {
         }
     }
     
-    func updateLayout() {
+    func smallMusicPlayerLayout() {
         imageView.snp.removeConstraints()
         stackView.snp.removeConstraints()
-        titleLabel.snp.removeConstraints()
+        labelStackView.snp.removeConstraints()
         
         stackView.removeArrangedSubview(prevButton)
         prevButton.removeFromSuperview()
         
         slider.isHidden = true
         
+        labelStackView.alignment = .leading
+        
         titleLabel.textAlignment = .left
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        artistLabel.textAlignment = .left
+        artistLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
     
         imageView.snp.makeConstraints { imageView in
             imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(6)
@@ -449,11 +321,56 @@ extension MusicPlayerViewController: FloatingPanelControllerDelegate {
             stackView.width.equalTo(50)
         }
         
-        titleLabel.snp.makeConstraints { titleLabel in
-            titleLabel.leading.equalTo(imageView.snp.trailing).offset(6)
-            titleLabel.trailing.equalTo(stackView.snp.leading).offset(6)
-            titleLabel.centerY.equalTo(imageView)
+        
+        labelStackView.snp.makeConstraints { labelStackView in
+            labelStackView.leading.equalTo(imageView.snp.trailing).offset(12)
+            labelStackView.trailing.equalTo(stackView.snp.leading).offset(0)
+            labelStackView.centerY.equalTo(imageView)
         }
+    }
+    
+    func fullMusicPlayerLayout() {
+        stackView.insertArrangedSubview(prevButton, at: 0)
+        
+        imageView.snp.removeConstraints()
+        slider.snp.removeConstraints()
+        stackView.snp.removeConstraints()
+        labelStackView.snp.removeConstraints()
+        
+        labelStackView.alignment = .center
+        
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        artistLabel.textAlignment = .center
+        artistLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        
+        imageView.snp.makeConstraints { imageView in
+            imageView.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(80)
+            imageView.centerX.equalToSuperview()
+            imageView.height.equalTo(330)
+            imageView.width.equalTo(330)
+        }
+        
+        labelStackView.snp.makeConstraints { labelStackView in
+            labelStackView.centerX.equalToSuperview()
+            labelStackView.top.equalTo(imageView.snp.bottom).offset(32)
+            labelStackView.width.equalTo(imageView.snp.width)
+        }
+        
+        slider.snp.makeConstraints { slider in
+            slider.top.equalTo(labelStackView.snp.bottom).offset(24)
+            slider.width.equalTo(imageView.snp.width)
+            slider.centerX.equalToSuperview()
+        }
+        
+        stackView.snp.makeConstraints { stackView in
+            stackView.top.equalTo(slider.snp.bottom).offset(32)
+            stackView.width.equalTo(imageView.snp.width)
+            stackView.centerX.equalToSuperview()
+        }
+        
+        slider.isHidden = false
+        
     }
     
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
